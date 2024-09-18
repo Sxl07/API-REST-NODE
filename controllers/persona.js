@@ -99,16 +99,12 @@ const personaPost = async (req, res = response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: 'Hable con el Administrador',
             err: error
         })
-
-
     }
-
-
 }
 
 
@@ -176,9 +172,9 @@ const personaDelete = async (req, res = response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ok:false,
+        res.json({ok:false,
             msg: 'Hable con el Administrador',
-            err: error
+            error: error
         })
     }
 }
