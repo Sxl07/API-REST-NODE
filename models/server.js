@@ -12,13 +12,8 @@ class Server {
             auth: '/api/auth',
             persona: '/api/persona',
             usuario: '/api/usuario',
+            ciudad: '/api/ciudad',
         }
-
-        /*
-        this.app.get('/', functioWn (req, res) {
-            res.send('Hola Mundo a todos...')
-        })
-        */
 
         //Aqui me conecto a la BD
         this.dbConnection();
@@ -28,7 +23,6 @@ class Server {
 
         //Routes
         this.routes();
-
     }
 
     async dbConnection() {
@@ -44,6 +38,7 @@ class Server {
     //this.app.use(this.pathsMySql.auth, require('../routes/MySqlAuth'));
     this.app.use(this.pathsMySql.persona, require('../routes/persona'));
     this.app.use(this.pathsMySql.usuario, require('../routes/usuario'));
+    this.app.use(this.pathsMySql.ciudad, require('../routes/ciudad'));
     }
 
     middlewares() {

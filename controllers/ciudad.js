@@ -1,32 +1,32 @@
 const { response, request } = require('express');
 const {bdmysql} =require('../database/MariaDbConnection')
-const Persona = require("../models/persona")
+const Ciudad = require("../models/ciudad")
 
 
-const personasGet =  async (req, res) => { 
-   const persona = await Persona.findAll();
+const ciudadesGet =  async (req, res) => { 
+   const ciudad = await Ciudad.findAll();
    res.json({
-    data: persona
+    data: ciudad
    })
 };
 
 
-const  PersonaByIdGet = async (req = request, res = response) => {
+const  CiudadByIdGet = async (req = request, res = response) => {
     const { id } = req.params;
 
     try {
 
-        const unaPersona = await Persona.findByPk(id);
+        const unaCiudad = await Ciudad.findByPk(id);
 
-        if (!unaPersona) {
-            return res.status(404).json({ok: false, 
-                msg: "does not ecst"
+        if (!unaCiudad) {
+            return res.json({ok: false, 
+                msg: "ciudad no existe"
             })
         }
         
         res.json({
             ok:true,
-            data:unaPersona})
+            data:unaCiudad})
 
     }
 
@@ -39,16 +39,16 @@ const  PersonaByIdGet = async (req = request, res = response) => {
     }
 }
 
-const personasComoGet = async (req = request, res = response) => {
+const ciudadesComoGet = async (req = request, res = response) => {
     const { termino } = req.params;
 
     console.log("TERMINO", termino);
 
     try {
         const results = await bdmysql.query(
-            "SELECT * FROM persona WHERE nombres LIKE ? OR apellidos LIKE ? ORDER BY nombres",
+            "SELECT * FROM ciudad WHERE nombre LIKE ?",
             {
-                replacements: [`%${termino}%`, `%${termino}%`],
+                replacements: [`%${termino}%`],
                 type: bdmysql.QueryTypes.SELECT
             }
         );
@@ -59,7 +59,7 @@ const personasComoGet = async (req = request, res = response) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: 'Hable con el Administrador',
             err: error
@@ -69,9 +69,9 @@ const personasComoGet = async (req = request, res = response) => {
 
 
 
-const personaPost = async (req, res = response) => {
+const ciudadPost = async (req, res = response) => {
 
-    const { nombres, apellidos, fecha_nacimiento } = req.body;
+    const { nombre } = req.body;
 
 
     const datos = req.body;
@@ -80,18 +80,18 @@ const personaPost = async (req, res = response) => {
     console.log("Datos", datos);
 
 
-    const persona = new Persona({ nombres, apellidos, fecha_nacimiento });
+    const ciudad = new Ciudad({ nombre });
 
 
     try {
 
-        const newPersona = await persona.save();
+        const newCiudad = await ciudad.save();
 
-        persona.id_persona = newPersona.null;
+        ciudad.id_ciudad = newCiudad.null;
 
         res.json({
             ok: true,
-            data: persona
+            data: ciudad
         });
 
 
@@ -107,7 +107,7 @@ const personaPost = async (req, res = response) => {
 
 
 
-const personaPut = async (req, res = response) => {
+const ciudadPut = async (req, res = response) => {
 
     const { id } = req.params;
     const { body } = req;
@@ -117,51 +117,48 @@ const personaPut = async (req, res = response) => {
 
     try {
 
-        const persona = await Persona.findByPk(id);
+        const ciudad = await Ciudad.findByPk(id);
 
-        if (!persona) {
-            return res.status(404).json({ok:false,
-                msg: 'No existe una Persona con el id: ' + id
+        if (!ciudad) {
+            return res.json({ok:false,
+                msg: 'No existe una Ciudad con el id: ' + id
             })
         }
        
-        await persona.update(body);
+        await ciudad.update(body);
 
-        res.json({ok:true,data:persona});
+        res.json({ok:true,data:ciudad});
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ok:false,
+        res.json({ok:false,
             msg: 'Hable con el Administrador',
             err: error
         })
     }
 }
 
-
-
-
-const personaDelete = async (req, res = response) => {
+const ciudadDelete = async (req, res = response) => {
     const { id } = req.params;
 
     console.log(id);
  
     try {
 
-        const persona = await Persona.findByPk(id);
+        const ciudad = await Ciudad.findByPk(id);
         //const usuarioAutenticado = req.usuario;
 
-        if (!persona) {
+        if (!ciudad) {
             return res.json({ok:false,
-                msg: 'No existe una persona con el id: ' + id
+                msg: 'No existe una ciudad con el id: ' + id
             })
         }
 
         //Borrado de la BD
-        await persona.destroy();
+        await ciudad.destroy();
 
         res.json({ok:true,
-            persona:persona,
+            ciudad:ciudad,
             //autenticado:usuarioAutenticado
         });
 
@@ -175,5 +172,5 @@ const personaDelete = async (req, res = response) => {
 }
 
 module.exports = {
-    personasGet, PersonaByIdGet, personasComoGet,personaPost,personaDelete,personaPut,
+    ciudadesGet, CiudadByIdGet, ciudadesComoGet,ciudadPost,ciudadDelete,ciudadPut,
 };

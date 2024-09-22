@@ -1,6 +1,5 @@
 const { Router } = require('express');
 
-
 const { personasGet,
     PersonaByIdGet,
     personasComoGet,

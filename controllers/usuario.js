@@ -35,7 +35,7 @@ const  UsuarioByIdGet = async (req = request, res = response) => {
 
     catch (error) {
         console.log(error);
-        res.status(500).json({ok:false,
+        res.json({ok:false,
             msg: 'Hable con el Administrador',
             err: error
         })
@@ -75,7 +75,7 @@ const  UsuarioContrasena = async (req = request, res = response) => {
 
     catch (error) {
         console.log(error);
-        res.status(500).json({ok:false,
+        res.json({ok:false,
             msg: 'Hable con el Administrador',
             err: error
         })
@@ -103,7 +103,7 @@ const usuariosComoGet = async (req = request, res = response) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: 'Hable con el Administrador',
             err: error
@@ -132,7 +132,7 @@ const loginPost = async(req,res=response)=>{
 
  } catch (error) {
     console.log(error);
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: 'Hable con el Administrador',
             err: error
@@ -147,8 +147,8 @@ const usuarioPost = async (req, res) => {
         const personaExiste = await Persona.findByPk(id_persona);
 
         if (!personaExiste) {
-            return res.status(404).json({ok: false, 
-                msg: "does not ecst"
+            return res.json({ok: false, 
+                msg: "persona no existe"
             })
         }
 
@@ -175,7 +175,7 @@ const usuarioPost = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: 'Hable con el Administrador',
             err: error.message
@@ -193,7 +193,7 @@ const usuarioPut = async (req, res = response) => {
         const usuario = await Usuario.findByPk(id);
 
         if (!usuario) {
-            return res.status(404).json({ok:false,
+            return res.json({ok:false,
                 msg: 'No existe un Usuario con el id: ' + id
             })
         }
@@ -248,7 +248,7 @@ const usuarioDelete = async (req, res = response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ok:false,
+        res.json({ok:false,
             msg: 'Hable con el Administrador',
             err: error
         })
