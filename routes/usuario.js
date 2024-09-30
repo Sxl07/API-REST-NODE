@@ -15,20 +15,20 @@ const { usuariosGet,
 
 const router = Router();
 
-router.get('/', usuariosGet);
+router.get('/',validarJWT,usuariosGet);
 
-router.get('/:id' ,UsuarioByIdGet);
+router.get('/:id' ,validarJWT,UsuarioByIdGet);
 
-router.get('/verificar/:id', UsuarioContrasena);
+router.get('/verificar/:id',validarJWT, UsuarioContrasena);
 
-router.get('/como/:termino', usuariosComoGet);
+router.get('/como/:termino',validarJWT, usuariosComoGet);
 
 router.post('/login', loginPost);
 
-router.post('/',usuarioPost);
+router.post('/',validarJWT,usuarioPost);
 
-router.put('/:id', usuarioPut);
+router.put('/:id',validarJWT, usuarioPut);
 
-router.delete('/:id', usuarioDelete);
+router.delete('/:id',validarJWT, usuarioDelete);
 
 module.exports = router;

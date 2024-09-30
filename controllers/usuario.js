@@ -23,7 +23,7 @@ const  UsuarioByIdGet = async (req = request, res = response) => {
 
         const unUsuario = await Usuario.findByPk(id);
         if (!unUsuario) {
-            return res.status(404).json({ok: false, 
+            return res.json({ok: false, 
                 msg: "does not ecst"
             })
         }
@@ -51,23 +51,23 @@ const  UsuarioContrasena = async (req = request, res = response) => {
 
         const unUsuario = await Usuario.findByPk(id);
         if (!unUsuario) {
-            return res.status(404).json({ok: false, 
+            return res.json({ok: false, 
                 msg: "does not ecst"
             })
         }
 
         contrasenaI = body.contraseña
-        console.log(contrasenaI)
         validacion= await bcrypt.compare(contrasenaI, unUsuario.contraseña);
-        console.log(unUsuario.contraseña)
 
         console.log(validacion)
 
         if (!validacion) {
-            return res.status(404).json({ok: false, 
+            return res.json({ok: false, 
                 msg: "la contraseña es incorrecta"
             })
         }
+
+        const token = await generarJWT(unUsuario.id_usuario)
         
         res.json({
             ok:true,msj:"La contraseña es correcta"})
@@ -118,11 +118,11 @@ const loginPost = async(req,res=response)=>{
     var condicion = {where : {email:email}} 
     const usuario = await Usuario.findOne(condicion);
     if(!usuario){
-    return res.status(400).json({ok:false,msg: "Usuario no encontrado con el email ingresado" + correo})
+    return res.json({ok:false,msg: "Usuario no encontrado con el email ingresado" + correo})
     }
     const validaPassword = bcrypt.compare(contraseña,usuario.contraseña);
     if(!validaPassword){
-        return res.status(400).json({ok:false,msg: "Password incorrecto con el email ingresado" + contraseña})
+        return res.json({ok:false,msg: "Password incorrecto con el email ingresado" + contraseña})
     }
     const token = await generarJWT(usuario.id_usuario);
 
@@ -212,7 +212,7 @@ const usuarioPut = async (req, res = response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ok:false,
+        res.json({ok:false,
             msg: 'Hable con el Administrador',
             err: error
         })
@@ -230,7 +230,7 @@ const usuarioDelete = async (req, res = response) => {
         //const usuarioAutenticado = req.usuario;
 
         if (!usuario) {
-            return res.status(404).json({ok:false,
+            return res.json({ok:false,
                 msg: 'No existe una usuario con el id: ' + id
             })
         }
